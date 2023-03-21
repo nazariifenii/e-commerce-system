@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  app:
+    container_name: e-commerce-client
+    image: e-commerce-client-image
+    build: 
+      context: .
+    ports:
+      - 8080:80
