@@ -1,0 +1,21 @@
+name: Netlify Deploy
+on:
+  push:
+    branches:
+      - setup-app-deploy
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install Dependencies
+        run: npm install
+      - name: Build
+        run: npm run build
+      - name: Deploy to Netlify
+        uses: nwtgck/actions-netlify@v1.4.1
+        with:
+          publish-dir: ./build
+          github-token: ${{ secrets.REPO_GIT_TOKEN }}
+          site-id: 165756c1-5309-453f-bf61-5ac8c1df440a
