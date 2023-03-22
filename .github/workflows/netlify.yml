@@ -18,7 +18,7 @@ jobs:
       with:
         context: .
         push: true
-        tags: nazarfenii/e-commerce-system:${{ github.sha }}
+        tags: nazariifenii/e-commerce-system:${{ github.sha }}
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
 
@@ -28,7 +28,7 @@ jobs:
         publish-dir: .
         deploy-dir: /usr/share/nginx/html
         publish-command: |
-          docker pull nazarfenii/e-commerce-system:${{ github.sha }}
-          docker run -d --name e-commerce-system -p 8080:80 nazarfenii/e-commerce-system:${{ github.sha }}
+          docker pull nazariifenii/e-commerce-system:${{ github.sha }}
+          docker run -d --name e-commerce-system -p 8080:80 nazariifenii/e-commerce-system:${{ github.sha }}
         github-token: ${{ secrets.REPO_GIT_TOKEN }}
         site-id: 165756c1-5309-453f-bf61-5ac8c1df440a
