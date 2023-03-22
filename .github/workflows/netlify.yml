@@ -23,7 +23,7 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
 
     - name: Deploy to Netlify
-      uses: nwtgck/actions-netlify@v1.4.1
+      uses: nwtgck/actions-netlify@v1.2
       with:
         publish-dir: .
         deploy-dir: /usr/share/nginx/html
