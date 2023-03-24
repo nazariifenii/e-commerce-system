@@ -1,15 +1,5 @@
-import "./App.css";
-import Root from "./routes/root";
-import ErrorPage from "./error-page";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Root />,
-    errorElement: <ErrorPage />,
-  },
-]);
+import { RouterProvider } from "react-router";
+import router from "./navigation/router";
 
 function App() {
   return (
