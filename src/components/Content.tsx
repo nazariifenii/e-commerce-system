@@ -6,13 +6,14 @@ type Props = {
 };
 
 const contentStyle: React.CSSProperties = {
-  textAlign: "center",
+  padding: 20,
   minHeight: 120,
   lineHeight: "120px",
   backgroundColor: "#fff",
   display: "flex",
   flexDirection: "row",
   flexWrap: "wrap",
+  justifyContent: "center",
 };
 
 const Content: React.FC<Props> = ({ children }) => {

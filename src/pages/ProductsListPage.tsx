@@ -1,68 +1,43 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Layout, Space, Input } from "antd";
 
-import { CardItem, Header, Sider, Content } from "src/components";
-import { RangeFilter, CheckboxFilter } from "src/containers";
+import { Header, Sider, Content } from "src/components";
+import { RangeFilter, CheckboxFilter, ProductsList } from "src/containers";
 
-type Product = {
-  id: number;
-  title: string;
-  description: string;
-  price: number;
-  discountPercentage: number;
-  rating: number;
-  stock: number;
-  brand: string;
-  category: string;
-  thumbnail: string;
-  images: Array<string>;
-};
-
-type Products = {
-  products: Array<Product>;
-  total: number;
-  skip: number;
-  limit: number;
-};
-
-type Categories = Array<string>;
+import { useGetProducts, useGetProductsCategories } from "src/hooks/products";
 
 const ProductsListPage: React.FC = () => {
-  const [productsData, setProductsData] = useState<Products>();
-  const [productsCategories, setProductsCategories] = useState<Categories>([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
-  const productPrices =
-    productsData?.products.map((product) => product.price) || [];
+  const {
+    isLoading: productsLoading,
+    productsData,
+    productPrices,
+  } = useGetProducts(searchTerm);
+  
+  const { isLoading: categoriesLoading, productsCategories } =
+    useGetProductsCategories();
 
-  useEffect(() => {
-    const fetchCategories = () => {
-      fetch("https://dummyjson.com/products/categories")
-        .then((res) => res.json())
-        .then(setProductsCategories);
-    };
-
-    const fetchProducts = () => {
-      fetch("https://dummyjson.com/products")
-        .then((res) => res.json())
-        .then(setProductsData);
-    };
-
-    fetchProducts();
-    fetchCategories();
-  }, []);
+  const clearSearch = (searchTerm: any) => {
+    if (!searchTerm.length) {
+      setSearchTerm("");
+    }
+  };
 
   return (
     <Space direction="vertical" style={{ width: "100%" }} size={[0, 48]}>
       <Layout>
         <Header>
           <Input.Search
+            allowClear
             placeholder="Search for product"
-            onSearch={(value: string) => console.log(value)}
+            onSearch={setSearchTerm}
+            onChange={clearSearch}
             enterButton
           />
         </Header>
         <Layout>
-          <Sider>
+          <Sider isLoading={categoriesLoading}>
             <CheckboxFilter
               title="Category"
               options={productsCategories}
@@ -76,14 +51,10 @@ const ProductsListPage: React.FC = () => {
             ></RangeFilter>
           </Sider>
           <Content>
-            {productsData?.products.map((product: Product) => (
-              <CardItem
-                key={product.id}
-                title={product.title}
-                image={product.images[0]}
-                description={product.description}
-              ></CardItem>
-            ))}
+            <ProductsList
+              productsData={productsData}
+              isLoading={productsLoading}
+            ></ProductsList>
           </Content>
         </Layout>
       </Layout>

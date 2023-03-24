@@ -1,8 +1,9 @@
 import React from "react";
-import { Layout } from "antd";
+import { Layout, Skeleton } from "antd";
 
 type Props = {
   children: React.ReactNode;
+  isLoading?: boolean;
 };
 
 const siderStyle: React.CSSProperties = {
@@ -12,12 +13,12 @@ const siderStyle: React.CSSProperties = {
   padding: 10,
 };
 
-const Sider: React.FC<Props> = ({ children }) => {
-  return (
-    <Layout.Sider breakpoint="lg" collapsedWidth="0" style={siderStyle}>
+const Sider: React.FC<Props> = ({ children, isLoading = false }) => (
+  <Layout.Sider breakpoint="lg" collapsedWidth="0" style={siderStyle}>
+    <Skeleton loading={isLoading} active paragraph={{ rows: 5 }}>
       {children}
-    </Layout.Sider>
-  );
-};
+    </Skeleton>
+  </Layout.Sider>
+);
 
 export default Sider;

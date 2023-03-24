@@ -1,10 +1,11 @@
 import React from "react";
-import { Card, Image, Typography } from "antd";
+import { Card, Image, Skeleton, Typography } from "antd";
 
-type CardItemType = {
-  title: string;
-  image: string;
-  description: string;
+type Props = {
+  title?: string;
+  image?: string;
+  description?: string;
+  isLoading?: boolean;
 };
 
 const containerStyle: React.CSSProperties = {
@@ -13,24 +14,35 @@ const containerStyle: React.CSSProperties = {
   textAlign: "left",
 };
 
-const CardItem: React.FC<CardItemType> = ({ title, image, description }) => (
+const CardItem: React.FC<Props> = ({
+  title,
+  image,
+  description,
+  isLoading = false,
+}) => (
   <Card
     style={containerStyle}
     cover={
-      <Image
-        height={200}
-        src={image}
-        alt={title}
-        preview={false}
-        style={{ objectFit: "cover" }}
-      />
+      isLoading ? (
+        <Skeleton.Image style={{ width: "100%", height: 200 }} active />
+      ) : (
+        <Image
+          height={200}
+          src={image}
+          alt={title}
+          preview={false}
+          style={{ objectFit: "cover" }}
+        />
+      )
     }
   >
-    <Typography.Title level={5}>{title}</Typography.Title>
-    <Typography.Text ellipsis={true} type="secondary">
-      {description}
-    </Typography.Text>
-    <br />
+    <Skeleton loading={isLoading} active>
+      <Typography.Title level={5}>{title}</Typography.Title>
+      <Typography.Text ellipsis={true} type="secondary">
+        {description}
+      </Typography.Text>
+      <br />
+    </Skeleton>
   </Card>
 );
 

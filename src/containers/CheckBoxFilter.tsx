@@ -4,7 +4,7 @@ import { CheckboxValueType } from "antd/lib/checkbox/Group";
 
 type Props = {
   title: string;
-  options: string[];
+  options: Array<string> | undefined;
   onChange: (checkedValues: CheckboxValueType[]) => void;
 };
 
