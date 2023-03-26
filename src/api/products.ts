@@ -1,7 +1,7 @@
 import axios from "axios";
 import { CheckboxValueType } from "antd/lib/checkbox/Group";
 
-let baseURL = "http://localhost:3001"; // TODO: This can be moved to app config
+let baseURL = process.env.REACT_APP_API_URL;
 
 type getProductsQueryParams = {
   searchTerm?: string;

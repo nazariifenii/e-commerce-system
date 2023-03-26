@@ -6,5 +6,16 @@ services:
     image: e-commerce-system-image
     build: 
       context: .
+    environment:
+      - REACT_APP_API_URL=http://json-server:3000
     ports:
       - 8080:80
+  json-server:
+    image: codfish/json-server
+    command: npm run dev
+    volumes:
+      - ./db.js:/app/db.js
+    environment:
+      - PORT=3000
+    ports:
+      - "3001:3000"
