@@ -6,14 +6,11 @@ type Props = {
 };
 
 const headerStyle: React.CSSProperties = {
-  height: 64,
-  paddingInline: 50,
-  lineHeight: "64px",
   backgroundColor: "#fff",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
-  flexDirection: "column",
+  flexDirection: "row",
 };
 
 const Header: React.FC<Props> = ({ children }) => {

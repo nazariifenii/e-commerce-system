@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Slider, InputNumber, Typography } from "antd";
-
-type RangeState = [number, number];
+import { Slider, InputNumber, Typography, Button } from "antd";
 
 type Props = {
   filterTitle: string;
   minValue: number;
   maxValue: number;
-  onChange: (value: RangeState) => void;
+  onSubmit: (value: NumberRange) => void;
 };
 
 const inputGroupStyle: React.CSSProperties = {
@@ -19,15 +17,14 @@ const PriceRangeFilter: React.FC<Props> = ({
   filterTitle,
   minValue,
   maxValue,
-  onChange,
+  onSubmit,
 }) => {
-  const [range, setRange] = useState<RangeState>([minValue, maxValue]);
+  const [range, setRange] = useState<NumberRange>([minValue, maxValue]);
 
   useEffect(() => setRange([minValue, maxValue]), [minValue, maxValue]);
 
-  const handleRangeChange = (value: RangeState) => {
+  const handleRangeChange = (value: NumberRange) => {
     setRange(value);
-    onChange(value);
   };
 
   const handleMinInputChange = (value: number | null) => {
@@ -38,7 +35,6 @@ const PriceRangeFilter: React.FC<Props> = ({
       value = range[1];
     }
     setRange([value, range[1]]);
-    onChange([value, range[1]]);
   };
 
   const handleMaxInputChange = (value: number | null) => {
@@ -49,7 +45,10 @@ const PriceRangeFilter: React.FC<Props> = ({
       value = range[0];
     }
     setRange([range[0], value]);
-    onChange([range[0], value]);
+  };
+
+  const handleSubmit = () => {
+    onSubmit(range);
   };
 
   return (
@@ -64,17 +63,20 @@ const PriceRangeFilter: React.FC<Props> = ({
       />
       <div style={inputGroupStyle}>
         <InputNumber
+          controls={false}
           min={minValue}
           max={maxValue}
           value={range[0]}
           onChange={handleMinInputChange}
         />
         <InputNumber
+          controls={false}
           min={minValue}
           max={maxValue}
           value={range[1]}
           onChange={handleMaxInputChange}
         />
+        <Button onClick={handleSubmit}>OK</Button>
       </div>
     </div>
   );

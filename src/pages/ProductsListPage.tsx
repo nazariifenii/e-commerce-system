@@ -1,33 +1,42 @@
-import React, { useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import { Layout, Space, Input } from "antd";
+import { CheckboxValueType } from "antd/lib/checkbox/Group";
 
 import { Header, Sider, Content } from "src/components";
-import { RangeFilter, CheckboxFilter, ProductsList } from "src/containers";
+import {
+  RangeFilter,
+  CheckboxFilter,
+  ProductsList,
+  Sort,
+} from "src/containers";
 
-import { useGetProducts, useGetProductsCategories } from "src/hooks/products";
+import { useGetProducts, useGetProductsData } from "src/hooks/products";
 
 const ProductsListPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [page, setPage] = useState(1);
+  const [sorting, setSorting] = useState("price"); //TODO: PUt values in config
+  const [selectedBrands, setSelectedBrands] = useState<CheckboxValueType[]>([]); // TODO: Make filter universal
+  const [filterRange, setFilterRange] = useState({});
 
-  const {
-    isLoading: productsLoading,
-    productsData,
-    productPrices,
-  } = useGetProducts(searchTerm);
-  
-  const { isLoading: categoriesLoading, productsCategories } =
-    useGetProductsCategories();
+  const products = useGetProducts({
+    searchTerm,
+    page,
+    sortField: sorting,
+    filters: { ...(selectedBrands.length > 0 && { brand: selectedBrands }) },
+    range: filterRange,
+  });
 
-  const clearSearch = (searchTerm: any) => {
-    if (!searchTerm.length) {
-      setSearchTerm("");
-    }
-  };
+  const { productsCategories, productsBrands } = useGetProductsData();
+
+  const clearSearch = (e: ChangeEvent<HTMLInputElement>) =>
+    !e.target.value.length && setSearchTerm("");
 
   return (
     <Space direction="vertical" style={{ width: "100%" }} size={[0, 48]}>
       <Layout>
         <Header>
+          <Sort onChange={setSorting} sortType={sorting}></Sort>
           <Input.Search
             allowClear
             placeholder="Search for product"
@@ -37,23 +46,30 @@ const ProductsListPage: React.FC = () => {
           />
         </Header>
         <Layout>
-          <Sider isLoading={categoriesLoading}>
+          <Sider isLoading={productsCategories.isLoading}>
             <CheckboxFilter
-              title="Category"
-              options={productsCategories}
-              onChange={() => {}}
+              title="Brand"
+              options={productsBrands.data}
+              checkedValues={selectedBrands}
+              onChange={setSelectedBrands}
             ></CheckboxFilter>
             <RangeFilter
               filterTitle="Price"
-              minValue={Math.min(...productPrices)}
-              maxValue={Math.max(...productPrices)}
-              onChange={() => {}}
+              minValue={Math.min(...products.productPrices)}
+              maxValue={Math.max(...products.productPrices)}
+              onSubmit={(range) =>
+                setFilterRange((prevState) => ({
+                  ...prevState,
+                  price: range,
+                }))
+              }
             ></RangeFilter>
           </Sider>
           <Content>
             <ProductsList
-              productsData={productsData}
-              isLoading={productsLoading}
+              data={products.data}
+              isLoading={products.isLoading}
+              onPageSelected={setPage}
             ></ProductsList>
           </Content>
         </Layout>

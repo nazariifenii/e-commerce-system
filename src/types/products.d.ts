@@ -14,9 +14,13 @@ declare type ProductType = {
   images: Array<string>;
 };
 
+declare type Brands = Array<string>;
+
 declare type Products = {
-  products: Array<ProductType>;
-  total: number;
-  skip: number;
-  limit: number;
+  rows: Array<ProductType>;
+  total?: number;
 };
+
+declare type NumberRange = [number, number];
+
+declare type FilterFieldsRange = { [key]: [number, number] };

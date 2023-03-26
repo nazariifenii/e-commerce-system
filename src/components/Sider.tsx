@@ -8,7 +8,6 @@ type Props = {
 
 const siderStyle: React.CSSProperties = {
   textAlign: "center",
-  lineHeight: "120px",
   backgroundColor: "#fff",
   padding: 10,
 };
