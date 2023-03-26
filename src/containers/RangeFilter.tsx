@@ -1,20 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { Slider, InputNumber, Typography, Button } from "antd";
+import { Slider, InputNumber, Typography, Button, Row, Col } from "antd";
 
 type Props = {
-  filterTitle: string;
+  title?: string;
   minValue: number;
   maxValue: number;
   onSubmit: (value: NumberRange) => void;
 };
 
-const inputGroupStyle: React.CSSProperties = {
-  display: "flex",
-  justifyContent: "space-between",
-};
-
+// TODO: Fix Infinity value blinking in the input
 const PriceRangeFilter: React.FC<Props> = ({
-  filterTitle,
+  title,
   minValue,
   maxValue,
   onSubmit,
@@ -53,7 +49,35 @@ const PriceRangeFilter: React.FC<Props> = ({
 
   return (
     <div>
-      <Typography.Title level={5}>{filterTitle}</Typography.Title>
+      {title && <Typography.Title level={5}>{title}</Typography.Title>}
+      <Row justify="space-between">
+        <Row>
+          <Col>
+            <InputNumber
+              style={{ width: 70 }}
+              controls={false}
+              min={minValue}
+              max={maxValue}
+              value={range[0]}
+              onChange={handleMinInputChange}
+            />
+          </Col>
+          <span>&nbsp;-&nbsp;</span>
+          <Col>
+            <InputNumber
+              style={{ width: 70 }}
+              controls={false}
+              min={minValue}
+              max={maxValue}
+              value={range[1]}
+              onChange={handleMaxInputChange}
+            />
+          </Col>
+        </Row>
+        <Col>
+          <Button onClick={handleSubmit}>OK</Button>
+        </Col>
+      </Row>
       <Slider
         range
         min={minValue}
@@ -61,23 +85,6 @@ const PriceRangeFilter: React.FC<Props> = ({
         value={range}
         onChange={handleRangeChange}
       />
-      <div style={inputGroupStyle}>
-        <InputNumber
-          controls={false}
-          min={minValue}
-          max={maxValue}
-          value={range[0]}
-          onChange={handleMinInputChange}
-        />
-        <InputNumber
-          controls={false}
-          min={minValue}
-          max={maxValue}
-          value={range[1]}
-          onChange={handleMaxInputChange}
-        />
-        <Button onClick={handleSubmit}>OK</Button>
-      </div>
     </div>
   );
 };

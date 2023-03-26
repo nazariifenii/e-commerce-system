@@ -13,14 +13,15 @@ const placeholderData = Array.from({ length: 8 }, () => Object.create(null));
 
 const ProductsList: React.FC<Props> = ({ data, isLoading, onPageSelected }) => (
   <List
+    style={{ marginTop: 12, marginBottom: 60 }}
     grid={{
       gutter: 16,
       xs: 1,
       sm: 2,
-      md: 3,
-      lg: 4,
+      md: 2,
+      lg: 3,
       xl: 4,
-      xxl: 3,
+      xxl: 5,
     }}
     dataSource={isLoading ? placeholderData : data?.rows} // Plceholder data to render loading indicators
     pagination={{
@@ -37,10 +38,12 @@ const ProductsList: React.FC<Props> = ({ data, isLoading, onPageSelected }) => (
           <CardItem isLoading={true} />
         ) : (
           <CardItem
-            key={product.id}
+            key={product.id} // FIXME: Pass whole object
             title={product.title}
             image={product.thumbnail}
             description={product.description}
+            price={product.price}
+            discountPercentage={product.discountPercentage}
             rating={product.rating}
           />
         )}

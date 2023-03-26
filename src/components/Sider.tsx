@@ -7,13 +7,12 @@ type Props = {
 };
 
 const siderStyle: React.CSSProperties = {
-  textAlign: "center",
   backgroundColor: "#fff",
-  padding: 10,
+  marginRight: 16
 };
 
 const Sider: React.FC<Props> = ({ children, isLoading = false }) => (
-  <Layout.Sider breakpoint="lg" collapsedWidth="0" style={siderStyle}>
+  <Layout.Sider width={250} className='light-bg' breakpoint="md" collapsedWidth="0" style={siderStyle}>
     <Skeleton loading={isLoading} active paragraph={{ rows: 5 }}>
       {children}
     </Skeleton>

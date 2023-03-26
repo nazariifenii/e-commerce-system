@@ -57,6 +57,7 @@ export const useGetProducts = ({
     ) || [];
 
   return {
+    isFetching: paginatedProductsResult.isFetching,
     isLoading: paginatedProductsResult.isLoading,
     error: paginatedProductsResult.error,
     data: paginatedProductsResult.data,

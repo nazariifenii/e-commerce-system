@@ -15,3 +15,21 @@ code {
 .ant-checkbox-group-item {
   margin-inline-start: 0px !important;
 }
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #f5f5f5;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #dddddd;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #b9b9b9;
+}

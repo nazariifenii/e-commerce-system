@@ -1,5 +1,4 @@
-import Header from "./Header";
 import Sider from "./Sider";
-import Content from "./Content";
+import Divider from "./Divider";
 
-export { Header, Sider, Content };
+export { Sider, Divider };
