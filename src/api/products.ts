@@ -1,6 +1,8 @@
 import axios from "axios";
+import queryString from "query-string";
 import { CheckboxValueType } from "antd/lib/checkbox/Group";
 
+//TODO: Move to common config
 let baseURL = "https://desert-innovative-bedbug.glitch.me";
 
 type getProductsQueryParams = {
@@ -15,6 +17,24 @@ type getProductsQueryParams = {
 export const getProductsBrands = (): Promise<Brands> =>
   axios.get(`${baseURL}/brands`).then((response) => response.data);
 
+//TODO: move to utils
+const rangeFilterToJsonServer = (range: FilterFieldsRange) => {
+  return Object.entries(range).reduce(
+    (acc, [key, val]) => ({
+      ...acc,
+      [`${key}_gte`]: (val as NumberRange)[0],
+      [`${key}_lte`]: (val as NumberRange)[1],
+    }),
+    {}
+  );
+};
+
+//TODO: move to utils
+const sortValueToJsonServer = (sortValue: string) => {
+  const [_sort, _order] = sortValue.split("_");
+  return { _sort, _order };
+};
+
 export const getProducts = ({
   searchTerm,
   limit,
@@ -23,39 +43,23 @@ export const getProducts = ({
   filters,
   range,
 }: getProductsQueryParams): Promise<Products> => {
-  const filtersQuery = Object.entries(filters).reduce((acc, [key, val]) => {
-    const value = val.join(`&${key}=`);
-    return acc ? `${acc}&${key}=${value}` : `?${key}=${value}`;
-  }, "");
+  const requestURI = queryString.stringifyUrl({
+    url: baseURL + "/products",
+    query: {
+      ...filters,
+      ...(searchTerm && { q: searchTerm }),
+      ...(range && rangeFilterToJsonServer(range)),
+      ...(page && { _page: page }),
+      ...(limit && { _limit: limit }),
+      ...(sortField && sortValueToJsonServer(sortField)),
+    },
+  });
 
-  const rangeParams =
-    range &&
-    Object.entries(range).reduce((acc, [key, val]) => {
-      return {
-        ...acc,
-        [`${key}_gte`]: (val as NumberRange)[0],
-        [`${key}_lte`]: (val as NumberRange)[1],
-      };
-    }, {});
-
-  const params = {
-    ...(searchTerm && { q: searchTerm }),
-    ...(page && { _page: page }),
-    ...(limit && { _limit: limit }),
-    _sort: sortField.split("_")[0],
-    ...(sortField.includes("asc") || sortField.includes("desc")
-      ? { _order: sortField.split("_")[1] }
-      : {}),
-    ...(range && rangeParams),
-  };
-
-  return axios
-    .get(`${baseURL}/products${filtersQuery}`, { params })
-    .then((response) => {
-      const total = response.headers["x-total-count"];
-      return {
-        rows: response.data,
-        ...(total && { total }),
-      };
-    });
+  return axios.get(requestURI).then((response) => {
+    const total = response.headers["x-total-count"];
+    return {
+      rows: response.data,
+      ...(total && { total }),
+    };
+  });
 };

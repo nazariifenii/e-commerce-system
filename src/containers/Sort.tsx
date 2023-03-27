@@ -21,7 +21,7 @@ const options: Record<string, Option> = {
   },
   discountPercentage_desc: {
     value: "discountPercentage_desc",
-    label: "By discount",
+    label: "By discount percentage",
   },
 };
 

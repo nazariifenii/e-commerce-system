@@ -103,8 +103,9 @@ const ProductsListPage: React.FC = () => {
           <Sider
             isLoading={productsBrands.isLoading && productPrices.isLoading}
           >
-            <Collapse defaultActiveKey={[1, 2]} ghost>
+            <Collapse defaultActiveKey={[1, 3]} ghost>
               <Collapse.Panel
+                key={1}
                 header={
                   <Space>
                     <Typography.Text>Brand</Typography.Text>
@@ -113,17 +114,16 @@ const ProductsListPage: React.FC = () => {
                     </Typography.Text>
                   </Space>
                 }
-                key={1}
               >
                 <CheckboxFilter
                   options={productsBrands.data}
                   checkedValues={selectedBrands}
                   onChange={setSelectedBrands}
                   containerStyle={{ marginBottom: 12 }}
-                ></CheckboxFilter>
+                />
               </Collapse.Panel>
-              <Divider />
-              <Collapse.Panel header="Price" key={2}>
+              <Divider key={2} />
+              <Collapse.Panel key={3} header="Price">
                 <RangeFilter
                   minValue={Math.min(...productPrices.data)}
                   maxValue={Math.max(...productPrices.data)}
@@ -133,15 +133,14 @@ const ProductsListPage: React.FC = () => {
                       price: range,
                     }))
                   }
-                ></RangeFilter>
+                />
               </Collapse.Panel>
             </Collapse>
           </Sider>
           <Layout.Content>
             <ProductsList
               data={products.data}
-              isLoading={products.isLoading}
-              isFetching={products.isFetching}
+              isLoading={products.isFetching}
               onPageSelected={setPage}
             ></ProductsList>
           </Layout.Content>

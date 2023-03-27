@@ -15,6 +15,13 @@ const containerStyle: React.CSSProperties = {
   height: 370,
 };
 
+// TODO: Can be moved to utils.ts
+const toUSD = (price: number) =>
+  new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  }).format(price);
+
 const CardItem: React.FC<Props> = ({ product, isLoading = false }) => {
   const {
     title,
@@ -29,13 +36,6 @@ const CardItem: React.FC<Props> = ({ product, isLoading = false }) => {
     discountPercentage &&
     Number((price - price * (discountPercentage / 100)).toFixed(2));
 
-  // TODO: Can be moved to utils.ts
-  const toUSD = (price: number) =>
-    new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "USD",
-    }).format(price);
-
   return (
     <Card
       style={containerStyle}
@@ -48,7 +48,9 @@ const CardItem: React.FC<Props> = ({ product, isLoading = false }) => {
       }
     >
       <Skeleton loading={isLoading} active>
-        <Typography.Text style={{ fontSize: 15 }}>{title}</Typography.Text>
+        <Typography.Text style={{ fontSize: 15 }} ellipsis>
+          {title}
+        </Typography.Text>
         {rating && (
           <Row align="middle">
             <Space>
@@ -64,7 +66,6 @@ const CardItem: React.FC<Props> = ({ product, isLoading = false }) => {
             </Space>
           </Row>
         )}
-
         <Space style={{ marginTop: 8, marginBottom: 8 }}>
           <Row>
             {price && (
@@ -81,7 +82,6 @@ const CardItem: React.FC<Props> = ({ product, isLoading = false }) => {
             )}
           </Row>
         </Space>
-
         <Row>
           <Space size="small">
             <Typography.Text style={{ fontSize: 12, color: blue.primary }}>
