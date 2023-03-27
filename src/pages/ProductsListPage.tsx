@@ -21,6 +21,7 @@ import {
 
 import { useGetProducts, useGetProductsData } from "src/hooks/products";
 
+//TODO: Decompose into smaller components
 const ProductsListPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [page, setPage] = useState(1);
