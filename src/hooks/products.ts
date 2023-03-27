@@ -24,6 +24,7 @@ export const useGetProducts = ({
   const { isLoading, error, data, isFetching } = useQuery({
     queryKey: ["products", page, filters, sortField, searchTerm, range],
     keepPreviousData: true,
+    refetchOnWindowFocus: false,
     queryFn: () =>
       getProducts({
         searchTerm,

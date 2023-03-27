@@ -1,5 +1,14 @@
 import React from "react";
-import { Card, Image, Skeleton, Typography, Rate, Space, Row } from "antd";
+import {
+  Card,
+  Image,
+  Skeleton,
+  Typography,
+  Rate,
+  Space,
+  Row,
+  Badge,
+} from "antd";
 import { ThunderboltOutlined } from "@ant-design/icons";
 import { blue } from "@ant-design/colors";
 
@@ -28,6 +37,7 @@ const CardItem: React.FC<Props> = ({ product, isLoading = false }) => {
     thumbnail: image,
     price,
     discountPrice,
+    discountPercentage,
     rating,
   } = product || {};
 
@@ -38,7 +48,16 @@ const CardItem: React.FC<Props> = ({ product, isLoading = false }) => {
         isLoading ? (
           <Skeleton.Image style={{ width: "100%", height: 200 }} active />
         ) : (
-          <Image height={200} src={image} alt={title} preview={false} />
+          <Badge count={`- ${discountPercentage} %`} offset={[-40, 20]}>
+            <Image
+              height={200}
+              width={"100%"}
+              style={{ padding: 1 }} // Do not overlap Card borders
+              src={image}
+              alt={title}
+              preview={false}
+            />
+          </Badge>
         )
       }
     >
