@@ -24,7 +24,7 @@ import { useGetProducts, useGetProductsData } from "src/hooks/products";
 const ProductsListPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [page, setPage] = useState(1);
-  const [sorting, setSorting] = useState("price"); //TODO: Put values in config
+  const [sorting, setSorting] = useState("discountPrice"); //TODO: Put values in config
   const [selectedBrands, setSelectedBrands] = useState<CheckboxValueType[]>([]); // TODO: Make filter universal
   const [filterRange, setFilterRange] = useState({});
 

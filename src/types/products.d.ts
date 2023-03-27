@@ -5,6 +5,7 @@ declare type ProductType = {
   title: string;
   description: string;
   price: number;
+  discountPrice: number;
   discountPercentage: number;
   rating: number;
   stock: number;

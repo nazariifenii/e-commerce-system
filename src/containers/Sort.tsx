@@ -7,16 +7,16 @@ type Option = {
 };
 
 const options: Record<string, Option> = {
-  price: {
-    value: "price",
+  discountPrice: {
+    value: "discountPrice",
     label: "Price: from low to high",
   },
   rating_desc: {
     value: "rating_desc",
     label: "By rating",
   },
-  price_desc: {
-    value: "price_desc",
+  discountPrice_desc: {
+    value: "discountPrice_desc",
     label: "Price: from high to low",
   },
   discountPercentage_desc: {

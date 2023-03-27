@@ -27,14 +27,9 @@ const CardItem: React.FC<Props> = ({ product, isLoading = false }) => {
     title,
     thumbnail: image,
     price,
-    discountPercentage,
+    discountPrice,
     rating,
   } = product || {};
-
-  const computedPrice =
-    price &&
-    discountPercentage &&
-    Number((price - price * (discountPercentage / 100)).toFixed(2));
 
   return (
     <Card
@@ -75,9 +70,9 @@ const CardItem: React.FC<Props> = ({ product, isLoading = false }) => {
             )}
           </Row>
           <Row>
-            {computedPrice && (
+            {discountPrice && (
               <Typography.Text style={{ fontSize: 24 }} type="danger">
-                {toUSD(computedPrice)}
+                {toUSD(discountPrice)}
               </Typography.Text>
             )}
           </Row>
