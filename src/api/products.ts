@@ -12,9 +12,6 @@ type getProductsQueryParams = {
   range?: FilterFieldsRange;
 };
 
-export const getProductsCategories = (): Promise<Categories> =>
-  axios.get(`${baseURL}/categories`).then((response) => response.data);
-
 export const getProductsBrands = (): Promise<Brands> =>
   axios.get(`${baseURL}/brands`).then((response) => response.data);
 

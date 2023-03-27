@@ -33,6 +33,7 @@ type Props = {
 const SelectableDropdown: React.FC<Props> = ({ onChange, sortType }) => {
   return (
     <Select
+      style={{ width: "100%" }}
       defaultValue={options[sortType].label}
       options={Object.values(options)}
       onChange={onChange}

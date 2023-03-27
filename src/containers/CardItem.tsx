@@ -4,13 +4,8 @@ import { ThunderboltOutlined } from "@ant-design/icons";
 import { blue } from "@ant-design/colors";
 
 type Props = {
-  title?: string;
-  image?: string;
-  description?: string;
+  product?: ProductType;
   isLoading?: boolean;
-  discountPercentage?: number;
-  price?: number;
-  rating?: number;
 };
 
 const containerStyle: React.CSSProperties = {
@@ -20,14 +15,15 @@ const containerStyle: React.CSSProperties = {
   height: 370,
 };
 
-const CardItem: React.FC<Props> = ({
-  title,
-  image,
-  isLoading = false,
-  price,
-  discountPercentage,
-  rating,
-}) => {
+const CardItem: React.FC<Props> = ({ product, isLoading = false }) => {
+  const {
+    title,
+    thumbnail: image,
+    price,
+    discountPercentage,
+    rating,
+  } = product || {};
+
   const computedPrice =
     price &&
     discountPercentage &&
@@ -69,7 +65,7 @@ const CardItem: React.FC<Props> = ({
           </Row>
         )}
 
-        <Space style={{marginTop: 8, marginBottom: 8}}>
+        <Space style={{ marginTop: 8, marginBottom: 8 }}>
           <Row>
             {price && (
               <Typography.Text delete style={{ fontSize: 12 }} type="secondary">

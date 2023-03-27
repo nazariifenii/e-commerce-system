@@ -36,7 +36,11 @@ const ProductsListPage: React.FC = () => {
     range: filterRange,
   });
 
-  const { productsCategories, productsBrands } = useGetProductsData();
+  const { productPrices, productsBrands } = useGetProductsData({
+    searchTerm,
+    sortField: sorting,
+    filters: { ...(selectedBrands.length > 0 && { brand: selectedBrands }) },
+  });
 
   const clearSearch = (e: ChangeEvent<HTMLInputElement>) =>
     !e.target.value.length && setSearchTerm("");
@@ -86,7 +90,7 @@ const ProductsListPage: React.FC = () => {
                   </Space>
                 ) : null}
               </Col>
-              <Col>
+              <Col xs={24} sm={8} md={6} lg={6} xl={4}>
                 <Sort onChange={setSorting} sortType={sorting}></Sort>
               </Col>
             </Row>
@@ -96,7 +100,9 @@ const ProductsListPage: React.FC = () => {
         <Layout
           style={{ paddingLeft: 32, paddingRight: 32, backgroundColor: "#fff" }}
         >
-          <Sider isLoading={productsCategories.isLoading}>
+          <Sider
+            isLoading={productsBrands.isLoading && productPrices.isLoading}
+          >
             <Collapse defaultActiveKey={[1, 2]} ghost>
               <Collapse.Panel
                 header={
@@ -119,8 +125,8 @@ const ProductsListPage: React.FC = () => {
               <Divider />
               <Collapse.Panel header="Price" key={2}>
                 <RangeFilter
-                  minValue={Math.min(...products.productPrices)}
-                  maxValue={Math.max(...products.productPrices)}
+                  minValue={Math.min(...productPrices.data)}
+                  maxValue={Math.max(...productPrices.data)}
                   onSubmit={(range) =>
                     setFilterRange((prevState) => ({
                       ...prevState,
@@ -134,7 +140,8 @@ const ProductsListPage: React.FC = () => {
           <Layout.Content>
             <ProductsList
               data={products.data}
-              isLoading={products.isLoading || products.isFetching}
+              isLoading={products.isLoading}
+              isFetching={products.isFetching}
               onPageSelected={setPage}
             ></ProductsList>
           </Layout.Content>

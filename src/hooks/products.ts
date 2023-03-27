@@ -1,19 +1,18 @@
-import { useQueries } from "@tanstack/react-query";
+import { useQueries, useQuery } from "@tanstack/react-query";
 import { CheckboxValueType } from "antd/lib/checkbox/Group";
 
-import {
-  getProducts,
-  getProductsCategories,
-  getProductsBrands,
-} from "src/api/products";
+import { getProducts, getProductsBrands } from "src/api/products";
 
-type useGetProductsParams = {
+type UseGetProductsDataParams = {
   searchTerm?: string;
-  page: number;
   sortField: string;
   filters: { brand?: CheckboxValueType[] };
-  range?: FilterFieldsRange;
 };
+
+type UseGetProductsParams = {
+  page: number;
+  range?: FilterFieldsRange;
+} & UseGetProductsDataParams;
 
 export const useGetProducts = ({
   searchTerm,
@@ -21,22 +20,36 @@ export const useGetProducts = ({
   sortField,
   filters,
   range,
-}: useGetProductsParams) => {
-  const [paginatedProductsResult, nonPaginatedProductsResult] = useQueries({
+}: UseGetProductsParams) => {
+  const { isLoading, error, data, isFetching } = useQuery({
+    queryKey: ["products", page, filters, sortField, searchTerm, range],
+    keepPreviousData: true,
+    queryFn: () =>
+      getProducts({
+        searchTerm,
+        limit: 8,
+        page,
+        sortField,
+        filters,
+        range,
+      }),
+  });
+
+  return {
+    isFetching,
+    isLoading,
+    error,
+    data,
+  };
+};
+
+export const useGetProductsData = ({
+  searchTerm,
+  sortField,
+  filters,
+}: UseGetProductsDataParams) => {
+  const [nonPaginatedProducts, productsBrands] = useQueries({
     queries: [
-      {
-        queryKey: ["products", page, filters, sortField, searchTerm, range],
-        keepPreviousData: true,
-        queryFn: () =>
-          getProducts({
-            searchTerm,
-            limit: 8,
-            page,
-            sortField,
-            filters,
-            range,
-          }),
-      },
       {
         queryKey: ["products", filters, sortField, searchTerm],
         queryFn: () =>
@@ -46,32 +59,6 @@ export const useGetProducts = ({
             filters,
           }),
       },
-    ],
-  });
-
-  // Unfortunatelly the json server does not allows to return certain fields
-  // and does not count data dynamically, so we fetch all the fields
-  const productPrices =
-    nonPaginatedProductsResult?.data?.rows.map(
-      (product: ProductType) => product.price
-    ) || [];
-
-  return {
-    isFetching: paginatedProductsResult.isFetching,
-    isLoading: paginatedProductsResult.isLoading,
-    error: paginatedProductsResult.error,
-    data: paginatedProductsResult.data,
-    productPrices: productPrices, //TODO: Handle nonPaginatedProductsResult query separatelly (loading, error etc.)
-  };
-};
-
-export const useGetProductsData = () => {
-  const [productsCategories, productsBrands] = useQueries({
-    queries: [
-      {
-        queryKey: ["products", "categories"],
-        queryFn: getProductsCategories,
-      },
       {
         queryKey: ["products", "brands"],
         queryFn: getProductsBrands,
@@ -79,5 +66,17 @@ export const useGetProductsData = () => {
     ],
   });
 
-  return { productsCategories, productsBrands };
+  // Unfortunatelly the json server does not allows to return certain fields
+  // and does not count data dynamically, so we fetch all the fields
+  const nonPaginatedProductsPrices =
+    nonPaginatedProducts?.data?.rows.map(
+      (product: ProductType) => product.price
+    ) || [];
+
+  const productPrices = {
+    data: nonPaginatedProductsPrices,
+    isLoading: nonPaginatedProducts.isLoading,
+  };
+
+  return { productPrices, productsBrands };
 };
