@@ -1,7 +1,7 @@
 import axios from "axios";
 import { CheckboxValueType } from "antd/lib/checkbox/Group";
 
-let baseURL = process.env.REACT_APP_API_URL;
+let baseURL = "https://desert-innovative-bedbug.glitch.me";
 
 type getProductsQueryParams = {
   searchTerm?: string;
